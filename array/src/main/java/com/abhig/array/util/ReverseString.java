@@ -1,4 +1,4 @@
-package com.abhig.array.problem;
+package com.abhig.array.util;
 
 import com.abhig.ds.util.Assert;
 

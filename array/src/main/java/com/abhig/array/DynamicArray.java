@@ -11,26 +11,52 @@ public class DynamicArray<E> {
 	private int size;
 
 	public DynamicArray() {
-		data = new Object[DEFAULT_SIZE];
-		size = 0;
+		this.data = new Object[DEFAULT_SIZE];
+		this.size = 0;
 	}
 
+	public DynamicArray(int size) {
+		this.data = new Object[size];
+		this.size = 0;
+	}
+
+	/**
+	 * Returns the size of the array.
+	 * 
+	 * @return returns an {@code int} indicating the size of the array.
+	 */
 	public int size() {
 		return size;
 	}
 
-	// add - O(1) most times, O(n) sometimes
-	public void add(E element) {
-		// Check if element is null
-		Assert.notNull(element, "Element cannot be null");
+	/**
+	 * Returns {@code true} if array is empty.
+	 * 
+	 * @return returns {@code true} if {@code size} is zero, {@code false}
+	 *         otherwise.
+	 */
+	public boolean isEmpty() {
+		return size == 0;
+	}
+
+	/**
+	 * Adds the item to the end of this array.
+	 * <p>
+	 * Time complexity is O(1) most times, O(n) sometimes.
+	 * 
+	 * @param item the item to add.
+	 */
+	public void add(E item) {
+		// Check if item is null
+		Assert.notNull(item, "item cannot be null");
 
 		// Check if array is full (size == data.length)
 		if (size == data.length) {
 			increaseCapacity();
 		}
 
-		// Add element
-		data[size++] = element;
+		// Add item
+		data[size++] = item;
 	}
 
 	// Creating a new array and copying the data - O(n)
@@ -43,10 +69,17 @@ public class DynamicArray<E> {
 		}
 	}
 
-	// addAt - O(n)
-	public void addAt(int index, E element) {
-		// Check if element is null
-		Assert.notNull(element, "Element cannot be null");
+	/**
+	 * Adds the item at the specified position.
+	 * <p>
+	 * Time complexity is O(n).
+	 * 
+	 * @param index the position at which the item should be added.
+	 * @param item  the item to add.
+	 */
+	public void addAt(int index, E item) {
+		// Check if item is null
+		Assert.notNull(item, "item cannot be null");
 
 		// Check for index range (0 <= index < size)
 		Assert.isTrue(0 <= index && index < size, "Index out of bound");
@@ -56,62 +89,69 @@ public class DynamicArray<E> {
 			increaseCapacity();
 		}
 
-		// Move elements to right - O(n)
+		// Move items to right - O(n)
 		for (int i = size; i > index; i--) {
 			data[i] = data[i - 1];
 		}
 
-		// Add element
-		data[index] = element;
+		// Add item
+		data[index] = item;
 		size++;
 	}
 
-	// get
+	/**
+	 * Returns the item at the specified position.
+	 * <p>
+	 * Time complexity is O(1).
+	 * 
+	 * @param index the position to retrieve the item from.
+	 * @return the item at {@code index}.
+	 */
 	@SuppressWarnings("unchecked")
 	public E get(int index) {
 		// Check for index range (0 <= index < size)
-		Assert.isTrue(0 <= index && index < size, "Index out of bound");
+		Assert.isTrue(0 <= index && index < size, "Index out of bound: " + index);
 
 		return (E) data[index];
 	}
 
-	// delete - O(n)
-	public void delete(E element) {
-		// Check element for null
-		Assert.notNull(element, "Element cannot be null");
-
-		// Search element, return if not found
-		int index = indexOf(element);
-
-		if (index == -1) {
-			return;
-		}
-
-		// Move elements to left, make last element null
-		for (int i = index; i < size; i++) {
-			data[i] = data[i + 1];
-		}
-
-		data[--size] = null;
-	}
-
-	// indexOf O(n)
-	public int indexOf(E element) {
+	/**
+	 * Returns the position of the first occurrence of the specified item.
+	 * <p>
+	 * Time complexity is O(n).
+	 * 
+	 * @param item the item to search for.
+	 * @return index of the {@code item}.
+	 */
+	public int indexOf(E item) {
 		for (int i = 0; i < size; i++) {
-			if (data[i] == element) {
+			if (data[i] == item) {
 				return i;
 			}
 		}
 
 		return -1;
 	}
+	
+	/**
+	 * Deletes the first occurrence of the specified item.
+	 * <p>
+	 * Time complexity is O(n).
+	 * 
+	 * @param item the item to be deleted.
+	 */
+	public void delete(E item) {
+		// Check item for null
+		Assert.notNull(item, "item cannot be null");
 
-	// deleteAt O(n)
-	public void deleteAt(int index) {
-		// Check for index range (0 <= index < size)
-		Assert.isTrue(0 <= index && index < size, "Index out of bound");
+		// Search item, return if not found
+		int index = indexOf(item);
 
-		// Move elements to left, make last element null
+		if (index == -1) {
+			return;
+		}
+
+		// Move items to left, make last item null
 		for (int i = index; i < size; i++) {
 			data[i] = data[i + 1];
 		}
@@ -119,9 +159,32 @@ public class DynamicArray<E> {
 		data[--size] = null;
 	}
 
-	// reverse O(n/2) => O(n)
+	/**
+	 * Deletes the item at the specified position.
+	 * <p>
+	 * Time complexity is O(n).
+	 * 
+	 * @param index the position of the item to delete.
+	 */
+	public void deleteAt(int index) {
+		// Check for index range (0 <= index < size)
+		Assert.isTrue(0 <= index && index < size, "Index out of bound");
+
+		// Move items to left, make last item null
+		for (int i = index; i < size; i++) {
+			data[i] = data[i + 1];
+		}
+
+		data[--size] = null;
+	}
+
+	/**
+	 * Reverses the order of items in the array
+	 * <p>
+	 * Time complexity is O(n/2) ~ O(n)
+	 */
 	public void reverse() {
-		// For each element, exchange it with it's compliment (1st with last, 2nd with
+		// For each item, exchange it with it's compliment (1st with last, 2nd with
 		// last but one = i with size-1-i). Stop at mid. O(n/2) => O(n)
 		for (int i = 0; i < size - 1 - i; i++) {
 			Object temp = data[i];
