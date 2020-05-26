@@ -2,6 +2,7 @@ package com.abhig.array.util;
 
 import com.abhig.ds.util.Assert;
 
+// Given an array nums, write a function to move all 0s to the end of it while maintaining the relative order of the non-zero elements.
 public class MoveZeros {
 
 	public static void moveZeroes(int[] nums) {

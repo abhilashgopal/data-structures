@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.abhig.ds.util.Assert;
 
+// Given an array of integers, return indices of the two numbers such that they add up to a specific target.
 public class TwoSum {
 
 	public static int[] twoSum(int[] nums, int target) {
@@ -12,22 +13,18 @@ public class TwoSum {
 		Assert.notNull(nums, "Array cannot be null");
 
 		// Create an empty HashMap
-		Map<Integer, Integer> compliments = new HashMap<>();
+		Map<Integer, Integer> complements = new HashMap<>();
 
 		// Loop over numbers, check if item is in HashMap.
 		// If yes, return indices. Else, add the item's compliment with index in HashMap
-		int[] indices = new int[2];
 		for (int i = 0; i < nums.length; i++) {
-			if (compliments.containsKey(nums[i])) {
-				indices[0] = compliments.get(nums[i]);
-				indices[1] = i;
-				return indices;
-			} else {
-				compliments.put(target - nums[i], i);
+			if (complements.containsKey(nums[i])) {
+				return new int[] { complements.get(nums[i]), i };
 			}
+			complements.put(target - nums[i], i);
 		}
 
-		return indices;
+		throw new IllegalArgumentException("Items not found");
 	}
 
 }
